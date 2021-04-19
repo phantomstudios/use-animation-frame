@@ -10,10 +10,8 @@ const useAnimationFrame = (callback: RafCallback) => {
   const animate = useCallback(
     (time: number) => {
       if (!mounted.current) return;
-      if (previousTimeRef.current !== undefined) {
-        const delta = time - previousTimeRef.current;
-        callback(delta, time);
-      }
+      const delta = time - previousTimeRef.current;
+      callback(delta, time);
       previousTimeRef.current = time;
       requestRef.current = requestAnimationFrame(animate);
     },
