@@ -1,14 +1,56 @@
-import useLibrary from "../src";
 import { renderHook } from "@testing-library/react-hooks";
 
-describe("performs requests", () => {
-  it("should work with 1 argument", async () => {
-    const { result } = renderHook(() => useLibrary({argument1:10}));
-    expect(result.current.something).toEqual(10);
+import useAnimationFrame from "../src";
+import mockRaf, { STEP_TIME_INCREMENT } from "./utils/mockRaf";
+
+describe("useAnimationFrame", () => {
+  beforeEach(() => {
+    mockRaf.use();
   });
 
-  it("should work with 2 arguments", async () => {
-    const { result } = renderHook(() => useLibrary({argument1:10, argument2: 6}));
-    expect(result.current.something).toEqual(16);
+  afterEach(() => {
+    mockRaf.restore();
+  });
+
+  it("will increment time after one RAF", async () => {
+    let lastDelta: number | null = -10;
+    let lastTime: number | null = -10;
+
+    const callback = (delta: number, time: number) => {
+      lastDelta = delta;
+      lastTime = time;
+    };
+
+    renderHook(() => useAnimationFrame(callback));
+
+    mockRaf.step();
+
+    expect(lastDelta).toEqual(STEP_TIME_INCREMENT);
+    expect(lastTime).toEqual(STEP_TIME_INCREMENT);
+  });
+
+  it("will increment time after multiple RAFs", async () => {
+    let lastDelta: number | null = -10;
+    let lastTime: number | null = -10;
+
+    const callback = (delta: number, time: number) => {
+      lastDelta = delta;
+      lastTime = time;
+    };
+
+    renderHook(() => useAnimationFrame(callback));
+
+    mockRaf.step();
+    mockRaf.step();
+
+    expect(lastDelta).toEqual(STEP_TIME_INCREMENT);
+    expect(lastTime).toEqual(STEP_TIME_INCREMENT * 2);
+  });
+
+  it("will cleanup after unmounting", async () => {
+    const callback = () => null;
+    const { unmount } = renderHook(() => useAnimationFrame(callback));
+    unmount();
+    expect(mockRaf.rafCount()).toEqual(0);
   });
 });
