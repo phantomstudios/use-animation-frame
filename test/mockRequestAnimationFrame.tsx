@@ -8,7 +8,7 @@ interface RequestAnimationFrameRef {
 export const STEP_TIME_INCREMENT = 16;
 
 let originalRequestAnimationFrame: (callback: FrameRequestCallback) => number;
-let originalCancelAnimationFrame: (handle: number) => void;
+let originalCancelAnimationFrame: (requestId: requestID) => void;
 let requestAnimationFrames: RequestAnimationFrameRef[] = [];
 let currentTime = 0;
 let lastRequestID = 0;
