@@ -1,6 +1,9 @@
-name: Test
+name: test
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test:
@@ -8,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x, 14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -18,11 +21,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: npm install, build, and test
+      - name: npm install and build
         run: |
           npm ci
           npm run build --if-present
           npm run lint
-          npm test
+          npm run test
         env:
           CI: true

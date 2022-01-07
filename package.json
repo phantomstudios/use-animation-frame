@@ -1,22 +1,23 @@
 {
-  "name": "@phntms/PACKAGE-NAME",
-  "description": "Description, same as overview one-liner from README.md.",
+  "name": "@phntms/use-animation-frame",
+  "description": "A React hook to effortlessly run a single shared requestAnimationFrame() for all instances of the hook used with adjustable frames per second.",
   "version": "0.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "homepage": "https://github.com/phantomstudios/PACKAGE-NAME#readme",
+  "homepage": "https://github.com/phantomstudios/use-animation-frame#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/phantomstudios/PACKAGE-NAME.git"
+    "url": "https://github.com/phantomstudios/use-animation-frame.git"
   },
   "bugs": {
-    "url": "https://github.com/phantomstudios/PACKAGE-NAME/issues"
+    "url": "https://github.com/phantomstudios/use-animation-frame/issues"
   },
   "keywords": [
     "react",
     "hooks",
     "hook",
-    "react-hook"
+    "react-hook",
+    "useAnimationFrame"
   ],
   "scripts": {
     "build": "tsc",
@@ -34,7 +35,7 @@
     "fix:format": "prettier \"**/*.{md,html,yaml,yml}\" --write",
     "depcheck": "npx npm-check --update"
   },
-  "author": "John Chipps-Harding (john.chipps-harding@phntms.com)",
+  "author": "Paulo Ferreira Jorge (paulo.jorge@phntms.com)",
   "license": "MIT",
   "peerDependencies": {
     "react": ">=16.8.0"
@@ -65,5 +66,7 @@
     "ts-jest": "^26.1.0",
     "typescript": "^4.1.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "browser-or-node": "^2.0.0"
+  }
 }

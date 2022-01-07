@@ -1,90 +1,62 @@
-# PACKAGE-NAME
+# use-animation-frame
 
 [![NPM version][npm-image]][npm-url]
 [![Actions Status][ci-image]][ci-url]
 [![PR Welcome][npm-downloads-image]][npm-downloads-url]
 
-Package one-liner overview.
-
-## Introduction
-
-Package introduction, couple of paragraphs.
-
-```javascript
-import useLibrary from "@phntms/PACKAGE-NAME";
-
-const { something } = useLibrary({
-  argument1: "something",
-  argument2: "something else",
-});
-```
+A React hook to effortlessly run a single shared [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) for all instances of the hook used with adjustable frames per second.
 
 ## Installation
 
 Install this package with `npm`.
 
 ```bash
-npm i @phntms/PACKAGE-NAME
-```
-
-## Usage
-
-Example 1 description.
-
-```JSX
-import React from 'react';
-import useLibrary from '@phntms/PACKAGE-NAME';
-
-const SomeExample = () = {
-  const { something } = useApi({
-    argument1: "something",
-    argument2: "something else",
-  });
-
-  return (
-    <>
-      <h1>Result</h2>
-      <p>{something}</p>
-    </>
-  );
-}
-```
-
-Example 2 description.
-
-```JSX
-import React from 'react';
-import useLibrary from '@phntms/PACKAGE-NAME';
-
-const SomeExample2 = () = {
-  const { something } = useApi({
-    argument1: "something",
-    argument2: "something else",
-  });
-
-  return (
-    <>
-      <h1>Result</h2>
-      <p>{something}</p>
-    </>
-  );
-}
+npm i @phntms/use-animation-frame
 ```
 
 ## API
 
-### Input
+Accepts first a callback and second an optional frames per second:
 
-- `argument1` : Required - Description of argument.
-- `argument2` : Optional - Description of argument.
+```ts
+useAnimationFrame(callback, fps);
+```
+
+The callback is **required** and is called on _every_ animation frame window. Whereas `fps` (frames per second) is optional.
+
+FPS can be used to control how often callback triggers. By default it'll trigger around ~60 times per second (approximately every ~16ms by default), though you can change this, for example, use `30` to trigger callback ~30 times per second. **Note**: Any FPS can be used, although intervals cannot be faster than the `requestAnimationFrame` limit.
+
+## Single Shared `requestAnimationFrame()` Instances
+
+A highlight of this library over similar implementations is that instead of creating a new `requestAnimationFrame()` event listener for every instances of the hook, we're instead using one global instances that we 'hook' into for all instances of the hook used. This means you're getting less of a performance hit for using multiple instances of the hook. Additionally if used with custom `fps` limits, you can get much greater performance out of your components!
 
 ### Output
 
-- `something`: Description of output.
+The callback returns `deltaTime` - the total time in `ms` since the hook last run.
 
-[npm-image]: https://img.shields.io/npm/v/@phntms/PACKAGE-NAME.svg?style=flat-square&logo=react
-[npm-url]: https://npmjs.org/package/@phntms/PACKAGE-NAME
-[npm-downloads-image]: https://img.shields.io/npm/dm/@phntms/PACKAGE-NAME.svg
-[npm-downloads-url]: https://npmcharts.com/compare/@phntms/PACKAGE-NAME?minimal=true
-[ci-image]: https://github.com/phantomstudios/PACKAGE-NAME/workflows/Test/badge.svg
-[ci-url]: https://github.com/phantomstudios/PACKAGE-NAME/actions
+**Note**: Due to the nature of `requestAnimationFrames()` this will always likely slightly differ in time.
+
+## Examples
+
+```ts
+import useAnimationFrame from "@phntms/use-animation-frame";
+
+useAnimationFrame((deltaTime: number) => {
+  console.log(
+    `I'm called approximately every ~16ms, but was actually triggered after ${deltaTime}ms.`
+  );
+});
+
+useAnimationFrame((deltaTime: number) => {
+  console.log(
+    `I'm called approximately every 30 times per second, although I was actually trigger after ${deltaTime}ms`
+  );
+}, 30);
+```
+
+[npm-image]: https://img.shields.io/npm/v/@phntms/use-animation-frame.svg?style=flat-square&logo=react
+[npm-url]: https://npmjs.org/package/@phntms/use-animation-frame
+[npm-downloads-image]: https://img.shields.io/npm/dm/@phntms/use-animation-frame.svg
+[npm-downloads-url]: https://npmcharts.com/compare/@phntms/use-animation-frame?minimal=true
+[ci-image]: https://github.com/phantomstudios/use-animation-frame/workflows/Test/badge.svg
+[ci-url]: https://github.com/phantomstudios/use-animation-frame/actions

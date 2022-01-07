@@ -1,56 +1,44 @@
 import { renderHook } from "@testing-library/react-hooks";
 
 import useAnimationFrame from "../src";
-import mockRaf, { STEP_TIME_INCREMENT } from "./utils/mockRaf";
+import mockRequestAnimationFrame, {
+  STEP_TIME_INCREMENT,
+} from "./utils/mockRequestAnimationFrame";
 
-describe("useAnimationFrame", () => {
-  beforeEach(() => {
-    mockRaf.use();
-  });
+describe("The hook", () => {
+  beforeEach(() => mockRequestAnimationFrame.use());
 
-  afterEach(() => {
-    mockRaf.restore();
-  });
+  afterEach(() => mockRequestAnimationFrame.restore());
 
-  it("will increment time after one RAF", async () => {
-    let lastDelta: number | null = -10;
-    let lastTime: number | null = -10;
+  it("will increment time after one requestAnimationFrame", async () => {
+    let lastDeltaTime = 0;
 
-    const callback = (delta: number, time: number) => {
-      lastDelta = delta;
-      lastTime = time;
-    };
+    const callback = (deltaTime: number) => (lastDeltaTime = deltaTime);
 
     renderHook(() => useAnimationFrame(callback));
 
-    mockRaf.step();
+    mockRequestAnimationFrame.step();
 
-    expect(lastDelta).toEqual(STEP_TIME_INCREMENT);
-    expect(lastTime).toEqual(STEP_TIME_INCREMENT);
+    expect(lastDeltaTime).toEqual(STEP_TIME_INCREMENT);
   });
 
-  it("will increment time after multiple RAFs", async () => {
-    let lastDelta: number | null = -10;
-    let lastTime: number | null = -10;
+  it("will increment time after multiple requestAnimationFrames", async () => {
+    let lastDeltaTime = 0;
 
-    const callback = (delta: number, time: number) => {
-      lastDelta = delta;
-      lastTime = time;
-    };
+    const callback = (deltaTime: number) => (lastDeltaTime = deltaTime);
 
     renderHook(() => useAnimationFrame(callback));
 
-    mockRaf.step();
-    mockRaf.step();
+    mockRequestAnimationFrame.step();
+    mockRequestAnimationFrame.step();
 
-    expect(lastDelta).toEqual(STEP_TIME_INCREMENT);
-    expect(lastTime).toEqual(STEP_TIME_INCREMENT * 2);
+    expect(lastDeltaTime).toEqual(STEP_TIME_INCREMENT * 2);
   });
 
   it("will cleanup after unmounting", async () => {
     const callback = () => null;
     const { unmount } = renderHook(() => useAnimationFrame(callback));
     unmount();
-    expect(mockRaf.rafCount()).toEqual(0);
+    expect(mockRequestAnimationFrame.requestAnimationFrameCount()).toEqual(0);
   });
 });
