@@ -43,9 +43,7 @@ const step = () => {
   currentTime += STEP_TIME_INCREMENT;
   const currentRafs = rafs;
   rafs = [];
-  for (const f of currentRafs) {
-    f.callback(currentTime);
-  }
+  currentRafs.foreach((ref) => ref.callback(currentTime));
 };
 
 export default {
