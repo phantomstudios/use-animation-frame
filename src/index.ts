@@ -83,11 +83,14 @@ const createInterval = (fps: number): Interval => ({
 });
 
 /**
- * A hook that runs a shared single `requestAnimationFrame()` for all instances of the hook used.
+ * A hook that runs a shared single `requestAnimationFrame()` for all
+ * instances of the hook used.
  *
  * @param frame Callback that's called every animation frame window.
- * @param fps Optional callback FPS. For example, use `30` to trigger callback 30 times per second.
- * **Note**: Callback runs approximately every ~16ms by default.
+ * @param fps Optional callback FPS that can be used to control how often
+ * callback triggers. By default callback will trigger around ~60 times per
+ * second (approximately every ~16ms), though you can change this, for example,
+ * `30` can be used to trigger callback ~30 times per second.
  */
 const useAnimationFrame = (
   callback: (deltaTime: number) => void,

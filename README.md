@@ -24,7 +24,7 @@ useAnimationFrame(callback, fps);
 
 The callback is **required** and is called on _every_ animation frame window. Whereas `fps` is optional.
 
-FPS can be used to control how often callback triggers. By default it'll trigger around ~60 times per second (approximately every ~16ms), though you can change this, for example, `30` can be used to trigger callback ~30 times per second.
+FPS can be used to control how often callback triggers. By default callback will trigger around ~60 times per second (approximately every ~16ms), though you can change this, for example, `30` can be used to trigger callback ~30 times per second.
 
 **Note**: Any FPS can be used, although intervals cannot be faster than the `requestAnimationFrame` limit.
 
@@ -34,12 +34,9 @@ The callback returns `deltaTime` - the total time in `ms` since the hook last ru
 
 **Note**: Due to the nature of `requestAnimationFrames()` this will always likely slightly differ in time.
 
-
 ## Single Shared `requestAnimationFrame()` Instances
 
 A highlight of this library over similar implementations is that instead of creating a new `requestAnimationFrame()` event listener for every instances of the hook, we're instead using one global instances that we 'hook' into for all instances of the hook used. This means you're getting less of a performance hit for using multiple instances of the hook. Additionally if used with custom `fps` limits, you can get much greater performance out of your components!
-
-
 
 ## Examples
 
@@ -58,7 +55,6 @@ useAnimationFrame((deltaTime: number) => {
   );
 }, 30);
 ```
-
 
 ## 🍰 Contributing
 
