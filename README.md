@@ -16,7 +16,7 @@ npm i @phntms/use-animation-frame
 
 ## API
 
-Accepts first `callback` and second optional `framesPerSecond`:
+Accepts first `callback` and second `framesPerSecond`:
 
 ```ts
 useAnimationFrame(callback, framesPerSecond);
