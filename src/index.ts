@@ -2,82 +2,79 @@ import { useEffect } from "react";
 
 import { isBrowser } from "browser-or-node";
 
-import { Interval, Observer } from "./types";
+import { Interval, Observer, AnimationFrameCallback } from "./types";
 
 const observers: Observer[] = [];
 let currentFrame: number | undefined;
-let elapsedTime = 0;
+let previousTime = 0;
 
-const handleNextFrame = (timeStamp?: number) => {
+const handleIntervalObserverCallback = (
+  callback: AnimationFrameCallback,
+  interval: Interval
+): void => {
+  interval.deltaTime = previousTime - interval.elapsedTime;
+
+  // If time since last frame exceeds FPS interval, emit callback
+  if (interval.deltaTime >= interval.framesPerSecondInterval) {
+    callback(interval.deltaTime);
+    interval.elapsedTime =
+      previousTime - (interval.deltaTime % interval.framesPerSecondInterval);
+  }
+};
+
+const handleNextFrame = (timeStamp?: number): void => {
   // If first frame
   if (timeStamp === undefined) timeStamp = 0;
 
-  // Handle new time since last frame
-  const deltaTime = timeStamp - elapsedTime;
-  elapsedTime = timeStamp;
+  // Calculate shared time since last frame
+  const deltaTime = timeStamp - previousTime;
+  previousTime = timeStamp;
 
   observers.forEach(({ callback, interval }) => {
-    // If no interval was set, emit standard uncapped callback
-    if (!interval) callback(deltaTime);
-    else {
-      if (!timeStamp) return;
-
-      // Emit callback every time delta time exceeds fps interval
-      interval.deltaTime = timeStamp - interval.elapsedTime;
-      if (interval.deltaTime >= interval.fpsInterval) {
-        callback(interval.deltaTime);
-        interval.elapsedTime =
-          timeStamp - (interval.deltaTime % interval.fpsInterval);
-      }
-    }
+    !interval
+      ? callback(deltaTime)
+      : handleIntervalObserverCallback(callback, interval);
   });
 
-  // Request next frame
-  currentFrame = requestFrame();
+  requestFrame();
 };
 
-const requestFrame = () =>
-  isBrowser ? requestAnimationFrame(handleNextFrame) : undefined;
+const requestFrame = (firstFrame?: boolean): void => {
+  if (!isBrowser || (firstFrame && currentFrame !== undefined)) return;
 
-const cancelFrame = () =>
-  isBrowser && currentFrame ? cancelAnimationFrame(currentFrame) : undefined;
+  currentFrame = requestAnimationFrame(handleNextFrame);
+};
 
-const startRequestingAnimationFrames = () => {
-  if (currentFrame) return;
+const stopRequestingFrames = (): void => {
+  if (!isBrowser || currentFrame === undefined) return;
 
-  // Reset frame values, then start new frame
-  elapsedTime = 0;
+  cancelAnimationFrame(currentFrame);
   currentFrame = undefined;
-  currentFrame = requestFrame();
+  previousTime = 0;
 };
 
-const stopRequestingAnimationFrames = () => {
-  if (!currentFrame) return;
-  cancelFrame();
-};
-
-const addObserver = (observer: Observer) => {
+const addObserver = (observer: Observer): void => {
   // If callback doesn't already exist, add to list of observers
   const index = observers.indexOf(observer);
   if (~index) return;
   observers.push(observer);
 
-  // On this is first observer, start...
-  if (observers.length === 1) startRequestingAnimationFrames();
+  // If this is first observer, start requesting animation frames...
+  if (observers.length === 1) requestFrame(true);
 };
 
-const removeObserver = (observer: Observer) => {
+const removeObserver = (observer: Observer): void => {
   // Remove callback from existing list of observers
   const index = observers.indexOf(observer);
   if (!~index) return;
   observers.splice(index, 1);
 
   // If this was last observer, stop...
-  if (!observers.length) stopRequestingAnimationFrames();
+  if (!observers.length) stopRequestingFrames();
 };
 
-const createInterval = (fps: number): Interval => ({
-  fpsInterval: 1000 / fps,
+const createInterval = (framesPerSecond: number): Interval => ({
+  framesPerSecondInterval: 1000 / framesPerSecond,
   deltaTime: 0,
   elapsedTime: 0,
 });
@@ -87,23 +84,23 @@ const createInterval = (fps: number): Interval => ({
  * instances of the hook used.
  *
  * @param frame Callback that's called every animation frame window.
- * @param fps Optional callback FPS that can be used to control how often
- * callback triggers. By default callback will trigger around ~60 times per
- * second (approximately every ~16ms), though you can change this, for example,
- * `30` can be used to trigger callback ~30 times per second.
+ * @param framesPerSecond Optional parameter to control how often callback
+ * triggers. By default callback will trigger around ~60 times
+ * per second (approximately every ~16ms), though you can change this,
+ * for example, `30` can be used to trigger callback ~30 times per second.
  */
 const useAnimationFrame = (
-  callback: (deltaTime: number) => void,
-  fps?: number
-) => {
+  callback: AnimationFrameCallback,
+  framesPerSecond?: number
+): void => {
   useEffect(() => {
     const observer: Observer = { callback };
-    if (fps) observer.interval = createInterval(fps);
+    if (framesPerSecond) observer.interval = createInterval(framesPerSecond);
     addObserver(observer);
     return () => removeObserver(observer);
-  }, [callback, fps]);
+  }, [callback, framesPerSecond]);
 };
 
 export default useAnimationFrame;
 
-export { AnimateFrameCallback } from "./types";
+export { AnimationFrameCallback } from "./types";

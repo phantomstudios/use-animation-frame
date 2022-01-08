@@ -16,23 +16,23 @@ npm i @phntms/use-animation-frame
 
 ## API
 
-Accepts first a callback and second an optional FPS:
+Accepts first `callback` and second optional `framesPerSecond`:
 
 ```ts
-useAnimationFrame(callback, fps);
+useAnimationFrame(callback, framesPerSecond);
 ```
 
-The callback is **required** and is called on _every_ animation frame window. Whereas `fps` is optional.
+`callback` is **required** and is called on _every_ animation frame window.
 
-FPS can be used to control how often callback triggers. By default callback will trigger around ~60 times per second (approximately every ~16ms), though you can change this, for example, `30` can be used to trigger callback ~30 times per second.
+`framesPerSecond` is _optional_ and can be used to control how often callback triggers. By default callback will trigger around ~60 times per second (approximately every ~16ms), though you can change this, for example, `30` can be used to trigger callback ~30 times per second.
 
-**Note**: Any FPS can be used, although intervals cannot be faster than the `requestAnimationFrame` limit.
+**Note**: Any FPS can be used, although intervals cannot be faster than the `requestAnimationFrame()` limit.
 
 ### Output
 
 The callback returns `deltaTime` - the total time in `ms` since the hook last run.
 
-**Note**: Due to the nature of `requestAnimationFrames()` this will always likely slightly differ in time.
+**Note**: Due to the nature of `requestAnimationFrame()` this will always likely slightly differ in time.
 
 ## Single Shared `requestAnimationFrame()` Instances
 

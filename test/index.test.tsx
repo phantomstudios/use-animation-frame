@@ -13,7 +13,7 @@ describe("The hook", () => {
   it("should increment time after one requestAnimationFrame", async () => {
     let lastDeltaTime = 0;
 
-    const callback = (deltaTime: number) => (lastDeltaTime = deltaTime);
+    const callback = (deltaTime: number) => (lastDeltaTime += deltaTime);
 
     renderHook(() => useAnimationFrame(callback));
 
@@ -25,7 +25,7 @@ describe("The hook", () => {
   it("should increment time after multiple requestAnimationFrames", async () => {
     let lastDeltaTime = 0;
 
-    const callback = (deltaTime: number) => (lastDeltaTime = deltaTime);
+    const callback = (deltaTime: number) => (lastDeltaTime += deltaTime);
 
     renderHook(() => useAnimationFrame(callback));
 

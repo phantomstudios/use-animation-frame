@@ -28,22 +28,22 @@ const fakeCancelAnimationFrame = (requestId: requestID): void => {
   requestAnimationFrames.splice(index, 1);
 };
 
-const use = () => {
+const use = (): void => {
   originalRequestAnimationFrame = window.requestAnimationFrame;
   originalCancelAnimationFrame = window.cancelAnimationFrame;
   window.requestAnimationFrame = fakeRequestAnimationFrame;
   window.cancelAnimationFrame = fakeCancelAnimationFrame;
 };
 
-const restore = () => {
+const restore = (): void => {
+  requestAnimationFrames = [];
   currentTime = 0;
   lastRequestID = 0;
-  requestAnimationFrames = [];
   window.requestAnimationFrame = originalRequestAnimationFrame;
   window.cancelAnimationFrame = originalCancelAnimationFrame;
 };
 
-const step = () => {
+const step = (): void => {
   currentTime += STEP_TIME_INCREMENT;
   const currentRequestAnimationFrames = requestAnimationFrames;
   requestAnimationFrames = [];
