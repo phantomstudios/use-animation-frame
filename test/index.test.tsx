@@ -46,8 +46,11 @@ describe("The hook", () => {
 
   it("should cleanup after unmounting", async () => {
     const callback = () => null;
+
     const { unmount } = renderHook(() => useAnimationFrame(callback));
+
     unmount();
+
     expect(mockRequestAnimationFrame.requestAnimationFrameCount()).toEqual(0);
   });
 });
