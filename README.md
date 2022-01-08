@@ -36,7 +36,7 @@ The callback returns `deltaTime` - the total time in `ms` since the hook last ru
 
 ## Single Shared `requestAnimationFrame()` Instance
 
-Most implementations of this hook create unique `requestAnimationFrame()` loops for all instances of the hook. This is fine when you only use the hook once, but if you start running multiple hooks simultaneously this can get expensive. To counteract this issue, this library only ever creates a single global loop that we 'hook' into for all instances of the hook used. As such, this means you're getting less of a performance hit for using multiple instances of the hook. Additionally if used alongside custom `framesPerSecond`, you can get much greater performance out of your components!
+Most implementations of this hook create unique `requestAnimationFrame()` loops for all instances of the hook. This is fine when you only use the hook once, but if you start running multiple hooks simultaneously this can get expensive. To counteract this issue, this library only ever creates a single global loop that we 'hook' into for all instances of the hook used. As such, you haven't got to worry about the potential performance hit of using multiple instances of the hook. Additionally if used alongside custom `framesPerSecond`, you can get much greater performance out of your components!
 
 ## Examples
 
