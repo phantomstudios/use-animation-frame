@@ -32,11 +32,11 @@ useAnimationFrame(callback, framesPerSecond);
 
 The callback returns `deltaTime` - the total time in `ms` since the hook last run.
 
-**Note**: Due to the nature of `requestAnimationFrame()` this will always likely slightly differ in time.
+**Note**: Due to the nature of `requestAnimationFrame()` this will always likely differ in time.
 
-## Single Shared `requestAnimationFrame()` Instances
+## Single Shared `requestAnimationFrame()` Instance
 
-A highlight of this library over similar implementations is that instead of creating a new `requestAnimationFrame()` event listener for every instances of the hook, we're instead using one global instances that we 'hook' into for all instances of the hook used. This means you're getting less of a performance hit for using multiple instances of the hook. Additionally if used with custom `fps` limits, you can get much greater performance out of your components!
+Most implementations of this hook create unique `requestAnimationFrame()` loops for all instances of the hook. This is fine when you only use the hook once, but if you start running multiple hooks simultaneously this can get expensive. To counteract this issue, this library only ever creates a single global loop that we 'hook' into for all instances of the hook used. As such, this means you're getting less of a performance hit for using multiple instances of the hook. Additionally if used alongside custom `framesPerSecond`, you can get much greater performance out of your components!
 
 ## Examples
 
