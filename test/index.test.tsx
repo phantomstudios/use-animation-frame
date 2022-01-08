@@ -39,7 +39,7 @@ describe("The hook", () => {
     const callback = () => null;
 
     renderHook(() => useAnimationFrame(callback));
-    renderHook(() => useAnimationFrame(callback));
+    renderHook(() => useAnimationFrame(callback, 30));
 
     expect(mockRequestAnimationFrame.requestAnimationFrameCount()).toEqual(1);
   });
