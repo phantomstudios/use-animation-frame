@@ -35,10 +35,22 @@ describe("The hook", () => {
     expect(lastDeltaTime).toEqual(STEP_TIME_INCREMENT * 2);
   });
 
+  it("should only use a single requestAnimationFrame() if multiple hooks are used", async () => {
+    const callback = () => null;
+
+    renderHook(() => useAnimationFrame(callback));
+    renderHook(() => useAnimationFrame(callback, 30));
+
+    expect(mockRequestAnimationFrame.requestAnimationFrameCount()).toEqual(1);
+  });
+
   it("should cleanup after unmounting", async () => {
     const callback = () => null;
+
     const { unmount } = renderHook(() => useAnimationFrame(callback));
+
     unmount();
+
     expect(mockRequestAnimationFrame.requestAnimationFrameCount()).toEqual(0);
   });
 });
