@@ -45,13 +45,13 @@ import useAnimationFrame from "@phntms/use-animation-frame";
 
 useAnimationFrame((deltaTime: number) => {
   console.log(
-    `I'm called approximately every ~16ms, but I was actually triggered after ${deltaTime}ms.`
+    `I'm called approximately every ~16ms, but I was actually triggered after ${deltaTime}ms.`,
   );
 });
 
 useAnimationFrame((deltaTime: number) => {
   console.log(
-    `I'm called approximately 30 times per second, but I was actually trigger after ${deltaTime}ms.`
+    `I'm called approximately 30 times per second, but I was actually trigger after ${deltaTime}ms.`,
   );
 }, 30);
 ```
