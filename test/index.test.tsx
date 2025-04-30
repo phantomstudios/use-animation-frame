@@ -1,4 +1,8 @@
-import { renderHook } from "@testing-library/react";
+/**
+ * @jest-environment jsdom
+ */
+
+import { renderHook } from "@testing-library/react-hooks";
 
 import useAnimationFrame from "../src";
 import mockRequestAnimationFrame, {

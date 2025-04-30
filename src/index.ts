@@ -105,4 +105,4 @@ const useAnimationFrame = (
 
 export default useAnimationFrame;
 
-export { AnimationFrameCallback } from "./types";
+export type { AnimationFrameCallback, Observer, Interval };
