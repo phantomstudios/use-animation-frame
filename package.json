@@ -72,6 +72,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "browser-or-node": "^2.0.0"
+    "browser-or-node": "^3.0.0"
   }
 }
