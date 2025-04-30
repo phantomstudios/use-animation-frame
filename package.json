@@ -48,7 +48,6 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.25.1",
     "@testing-library/react": "^16.3.0",
-    "@testing-library/react-hooks": "^5.0.3",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.3",
