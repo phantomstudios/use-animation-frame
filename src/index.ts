@@ -10,7 +10,7 @@ let previousTime = 0;
 
 const handleIntervalObserverCallback = (
   callback: AnimationFrameCallback,
-  interval: Interval
+  interval: Interval,
 ): void => {
   interval.deltaTime = previousTime - interval.elapsedTime;
 
@@ -31,9 +31,11 @@ const handleNextFrame = (timeStamp?: number): void => {
   previousTime = timeStamp;
 
   observers.forEach(({ callback, interval }) => {
-    !interval
-      ? callback(deltaTime)
-      : handleIntervalObserverCallback(callback, interval);
+    if (interval) {
+      handleIntervalObserverCallback(callback, interval);
+    } else {
+      callback(deltaTime);
+    }
   });
 
   requestFrame();
@@ -91,7 +93,7 @@ const createInterval = (framesPerSecond: number): Interval => ({
  */
 const useAnimationFrame = (
   callback: AnimationFrameCallback,
-  framesPerSecond?: number
+  framesPerSecond?: number,
 ): void => {
   useEffect(() => {
     const observer: Observer = { callback };
