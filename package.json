@@ -68,7 +68,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "ts-jest": "^29.3.2",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "browser-or-node": "^3.0.0"
